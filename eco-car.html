@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>친환경차 자동차세 감면 계산기 - 2025년 최신</title>
+    <meta name="description" content="전기차, 하이브리드, 수소차 자동차세 감면 혜택을 계산하세요. 2025년 최신 감면율 적용.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .nav-menu {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .nav-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .calculator {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .calculator h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .result {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-item.total {
+            background: rgba(255, 255, 255, 0.3);
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .result-item.savings {
+            background: rgba(76, 175, 80, 0.3);
+            font-size: 1.15em;
+        }
+
+        .result-label {
+            font-size: 1.1em;
+        }
+
+        .result-value {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-box li {
+            padding: 8px 0;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .info-box li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .eco-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+
+            .nav-links {
+                grid-template-columns: 1fr;
+            }
+
+            .calculator {
+                padding: 20px;
+            }
+
+            .calculator h2 {
+                font-size: 1.4em;
+            }
+
+            .result-item {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔋 친환경차 자동차세</h1>
+            <p>전기차, 수소차, 하이브리드 자동차세 감면 혜택 계산</p>
+        </div>
+
+        <div class="nav-menu">
+            <div class="nav-links">
+                <a href="index.html">🚗 승용차세</a>
+                <a href="truck-tax.html">🚚 화물/승합차</a>
+                <a href="eco-car.html">🔋 친환경차</a>
+                <a href="discount-guide.html">💰 할인가이드</a>
+                <a href="car-tax-guide.html">📖 세금가이드</a>
+            </div>
+        </div>
+
+        <div class="calculator">
+            <h2>친환경차 자동차세 계산</h2>
+            
+            <div class="form-group">
+                <label for="ecoType">친환경차 종류</label>
+                <select id="ecoType" onchange="updateInfo()">
+                    <option value="electric">전기차 (100% 감면)</option>
+                    <option value="hydrogen">수소차 (100% 감면)</option>
+                    <option value="hybrid">하이브리드 (50% 감면)</option>
+                    <option value="plugin">플러그인 하이브리드 (50% 감면)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="displacement">배기량 (cc) <span class="eco-badge" id="ecoBadge">100% 감면</span></label>
+                <input type="number" id="displacement" placeholder="예: 1998" min="0">
+                <small style="color: #666; display: block; margin-top: 5px;" id="displacementNote">전기차/수소차는 배기량이 없지만 세금 계산을 위해 입력이 필요합니다</small>
+            </div>
+
+            <div class="form-group">
+                <label for="carAge">차량 연식 (최초 등록 연도)</label>
+                <select id="carAge">
+                    <option value="2025">2025년 (신차)</option>
+                    <option value="2024">2024년 (1년)</option>
+                    <option value="2023">2023년 (2년)</option>
+                    <option value="2022">2022년 (3년)</option>
+                    <option value="2021">2021년 (4년)</option>
+                    <option value="2020">2020년 (5년)</option>
+                    <option value="2019">2019년 (6년)</option>
+                    <option value="2018">2018년 (7년)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="annualPayment">
+                    <label for="annualPayment">연납 신청 (1월 16일~31일, 10% 할인)</label>
+                </div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculateTax()">친환경차 세금 계산하기</button>
+
+            <div class="result" id="result">
+                <h3>🌱 친환경차 자동차세 계산 결과</h3>
+                <div class="result-item">
+                    <span class="result-label">일반 차량 기준 세액</span>
+                    <span class="result-value" id="normalTax">0원</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">교육세 (30%)</span>
+                    <span class="result-value" id="eduTax">0원</span>
+                </div>
+                <div class="result-item savings">
+                    <span class="result-label">친환경차 감면 혜택</span>
+                    <span class="result-value" id="ecoDiscount">0원</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">연납 할인</span>
+                    <span class="result-value" id="annualDiscount">0원</span>
+                </div>
+                <div class="result-item total">
+                    <span class="result-label">연간 총 납부액</span>
+                    <span class="result-value" id="totalTax">0원</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">반기별 납부액 (6월/12월)</span>
+                    <span class="result-value" id="halfYearTax">0원</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>🌿 2025년 친환경차 자동차세 감면 안내</h3>
+            <ul>
+                <li><strong>전기차:</strong> 자동차세 100% 감면 (최대 연 140만원)</li>
+                <li><strong>수소차:</strong> 자동차세 100% 감면 (최대 연 140만원)</li>
+                <li><strong>하이브리드:</strong> 자동차세 50% 감면 (최대 연 65만원)</li>
+                <li><strong>플러그인 하이브리드:</strong> 자동차세 50% 감면 (최대 연 65만원)</li>
+                <li><strong>감면 기간:</strong> 최초 등록일로부터 5년간</li>
+                <li><strong>연납 할인:</strong> 감면 후에도 연납 10% 할인 적용 가능</li>
+            </ul>
+        </div>
+
+        <div class="info-box" style="border-left-color: #4caf50; margin-top: 20px;">
+            <h3>💰 친환경차 추가 혜택</h3>
+            <ul>
+                <li><strong>개별소비세:</strong> 전기차/수소차 최대 300만원 감면</li>
+                <li><strong>취득세:</strong> 전기차/수소차 최대 140만원 감면</li>
+                <li><strong>공영주차장:</strong> 서울시 기준 50% 할인</li>
+                <li><strong>통행료:</strong> 고속도로 통행료 50% 할인 (2024년 종료, 지자체별 상이)</li>
+                <li><strong>충전 인프라:</strong> 공공충전소 급속충전 요금 할인</li>
+                <li><strong>보조금:</strong> 전기차 최대 680만원, 수소차 최대 2,250만원 (지자체별 상이)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function updateInfo() {
+            const ecoType = document.getElementById('ecoType').value;
+            const badge = document.getElementById('ecoBadge');
+            const note = document.getElementById('displacementNote');
+            
+            if (ecoType === 'electric' || ecoType === 'hydrogen') {
+                badge.textContent = '100% 감면';
+                badge.style.background = 'linear-gradient(135deg, #4caf50 0%, #8bc34a 100%)';
+                note.style.display = 'block';
+            } else {
+                badge.textContent = '50% 감면';
+                badge.style.background = 'linear-gradient(135deg, #ff9800 0%, #ff5722 100%)';
+                note.style.display = 'none';
+            }
+        }
+
+        function calculateTax() {
+            const ecoType = document.getElementById('ecoType').value;
+            const displacement = parseInt(document.getElementById('displacement').value);
+            const carAge = parseInt(document.getElementById('carAge').value);
+            const annualPayment = document.getElementById('annualPayment').checked;
+
+            if (!displacement || displacement <= 0) {
+                alert('배기량을 입력해주세요.');
+                return;
+            }
+
+            // 1. 일반 차량 기준 자동차세 계산
+            let normalBaseTax = 0;
+            
+            if (displacement <= 1000) {
+                normalBaseTax = displacement * 80;
+            } else if (displacement <= 1600) {
+                normalBaseTax = 1000 * 80 + (displacement - 1000) * 140;
+            } else {
+                normalBaseTax = 1000 * 80 + 600 * 140 + (displacement - 1600) * 200;
+            }
+
+            // 2. 교육세
+            const eduTax = normalBaseTax * 0.3;
+            const normalTotalTax = normalBaseTax + eduTax;
+
+            // 3. 친환경차 감면
+            let ecoDiscountRate = 0;
+            let maxDiscount = 0;
+
+            if (ecoType === 'electric' || ecoType === 'hydrogen') {
+                ecoDiscountRate = 1.0; // 100%
+                maxDiscount = 1400000; // 최대 140만원
+            } else {
+                ecoDiscountRate = 0.5; // 50%
+                maxDiscount = 650000; // 최대 65만원
+            }
+
+            let ecoDiscount = normalTotalTax * ecoDiscountRate;
+            if (ecoDiscount > maxDiscount) {
+                ecoDiscount = maxDiscount;
+            }
+
+            const afterEcoDiscount = normalTotalTax - ecoDiscount;
+
+            // 4. 연납 할인 (감면 후 세액의 10%)
+            let annualDiscount = 0;
+            if (annualPayment) {
+                annualDiscount = afterEcoDiscount * 0.1;
+            }
+
+            // 5. 최종 납부액
+            const totalTax = afterEcoDiscount - annualDiscount;
+            const halfYearTax = totalTax / 2;
+
+            // 결과 표시
+            document.getElementById('normalTax').textContent = formatNumber(normalBaseTax) + '원';
+            document.getElementById('eduTax').textContent = formatNumber(eduTax) + '원';
+            document.getElementById('ecoDiscount').textContent = '-' + formatNumber(ecoDiscount) + '원 (' + (ecoDiscountRate * 100) + '%)';
+            document.getElementById('annualDiscount').textContent = annualPayment ? '-' + formatNumber(annualDiscount) + '원 (10%)' : '0원';
+            document.getElementById('totalTax').textContent = formatNumber(totalTax) + '원';
+            document.getElementById('halfYearTax').textContent = formatNumber(halfYearTax) + '원';
+
+            document.getElementById('result').classList.add('show');
+        }
+
+        // 엔터키로 계산
+        document.getElementById('displacement').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateTax();
+            }
+        });
+
+        // 페이지 로드 시 초기 정보 업데이트
+        updateInfo();
+    </script>
+</body>
+</html>

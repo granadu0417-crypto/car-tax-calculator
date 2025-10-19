@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자동차세 계산기 - 2025년 최신 승용차 세금 계산</title>
+    <meta name="description" content="2025년 최신 자동차세 계산기. 배기량, 연식, 연납 할인을 고려한 정확한 자동차세를 계산하세요.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .nav-menu {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .nav-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .calculator {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .calculator h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .result {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-item.total {
+            background: rgba(255, 255, 255, 0.3);
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .result-label {
+            font-size: 1.1em;
+        }
+
+        .result-value {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-box li {
+            padding: 8px 0;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .info-box li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .header p {
+                font-size: 1em;
+            }
+
+            .nav-links {
+                grid-template-columns: 1fr;
+            }
+
+            .calculator {
+                padding: 20px;
+            }
+
+            .calculator h2 {
+                font-size: 1.4em;
+            }
+
+            .result-item {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 자동차세 계산기</h1>
+            <p>2025년 최신 승용차 자동차세를 정확하게 계산하세요</p>
+        </div>
+
+        <div class="nav-menu">
+            <div class="nav-links">
+                <a href="index.html">🚗 승용차세</a>
+                <a href="truck-tax.html">🚚 화물/승합차</a>
+                <a href="eco-car.html">🔋 친환경차</a>
+                <a href="discount-guide.html">💰 할인가이드</a>
+                <a href="car-tax-guide.html">📖 세금가이드</a>
+            </div>
+        </div>
+
+        <div class="calculator">
+            <h2>승용차 자동차세 계산</h2>
+            
+            <div class="form-group">
+                <label for="carType">차량 구분</label>
+                <select id="carType">
+                    <option value="private">비영업용 (자가용)</option>
+                    <option value="business">영업용 (택시, 렌터카 등)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="displacement">배기량 (cc)</label>
+                <input type="number" id="displacement" placeholder="예: 1998" min="0">
+            </div>
+
+            <div class="form-group">
+                <label for="carAge">차량 연식 (최초 등록 연도)</label>
+                <select id="carAge">
+                    <option value="2025">2025년 (신차)</option>
+                    <option value="2024">2024년 (1년)</option>
+                    <option value="2023">2023년 (2년)</option>
+                    <option value="2022">2022년 (3년)</option>
+                    <option value="2021">2021년 (4년)</option>
+                    <option value="2020">2020년 (5년)</option>
+                    <option value="2019">2019년 (6년)</option>
+                    <option value="2018">2018년 (7년)</option>
+                    <option value="2017">2017년 (8년)</option>
+                    <option value="2016">2016년 (9년)</option>
+                    <option value="2015">2015년 (10년)</option>
+                    <option value="2014">2014년 (11년)</option>
+                    <option value="2013">2013년 (12년)</option>
+                    <option value="2012">2012년 (13년)</option>
+                    <option value="2011">2011년 (14년)</option>
+                    <option value="2010">2010년 (15년)</option>
+                    <option value="2009">2009년 이전</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="annualPayment">
+                    <label for="annualPayment">연납 신청 (1월 16일~31일, 10% 할인)</label>
+                </div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculateTax()">자동차세 계산하기</button>
+
+            <div class="result" id="result">
+                <h3>💰 자동차세 계산 결과</h3>
+                <div class="result-item">
+                    <span class="result-label">기본 자동차세</span>
+                    <span class="result-value" id="baseTax">0원</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">교육세 (30%)</span>
+                    <span class="result-value" id="eduTax">0원</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">연식 경감</span>
+                    <span class="result-value" id="ageDiscount">0원</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">연납 할인</span>
+                    <span class="result-value" id="annualDiscount">0원</span>
+                </div>
+                <div class="result-item total">
+                    <span class="result-label">연간 총 납부액</span>
+                    <span class="result-value" id="totalTax">0원</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">반기별 납부액 (6월/12월)</span>
+                    <span class="result-value" id="halfYearTax">0원</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>📌 2025년 승용차 자동차세 안내</h3>
+            <ul>
+                <li><strong>비영업용:</strong> 1000cc 이하 80원/cc, 1600cc 이하 140원/cc, 1600cc 초과 200원/cc</li>
+                <li><strong>영업용:</strong> 1600cc 이하 18원/cc, 1600cc 초과 24원/cc</li>
+                <li><strong>교육세:</strong> 자동차세의 30% (비영업용만 해당)</li>
+                <li><strong>연식 경감:</strong> 3년 5%, 6년 10%, 9년 15%, 12년 이상 50%</li>
+                <li><strong>연납 할인:</strong> 1월 16일~31일 신청 시 연세액의 10% 할인</li>
+                <li><strong>납부 시기:</strong> 6월(1~6월분), 12월(7~12월분) 각각 16일~말일</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function formatNumber(num) {
+            return new Intl.NumberFormat('ko-KR').format(Math.floor(num));
+        }
+
+        function calculateTax() {
+            const carType = document.getElementById('carType').value;
+            const displacement = parseInt(document.getElementById('displacement').value);
+            const carAge = parseInt(document.getElementById('carAge').value);
+            const annualPayment = document.getElementById('annualPayment').checked;
+
+            if (!displacement || displacement <= 0) {
+                alert('배기량을 입력해주세요.');
+                return;
+            }
+
+            // 1. 기본 자동차세 계산
+            let baseTax = 0;
+            
+            if (carType === 'private') {
+                // 비영업용
+                if (displacement <= 1000) {
+                    baseTax = displacement * 80;
+                } else if (displacement <= 1600) {
+                    baseTax = 1000 * 80 + (displacement - 1000) * 140;
+                } else {
+                    baseTax = 1000 * 80 + 600 * 140 + (displacement - 1600) * 200;
+                }
+            } else {
+                // 영업용
+                if (displacement <= 1600) {
+                    baseTax = displacement * 18;
+                } else {
+                    baseTax = 1600 * 18 + (displacement - 1600) * 24;
+                }
+            }
+
+            // 2. 교육세 (비영업용만)
+            const eduTax = carType === 'private' ? baseTax * 0.3 : 0;
+
+            // 3. 총 세액 (자동차세 + 교육세)
+            let totalBeforeDiscount = baseTax + eduTax;
+
+            // 4. 연식 경감 계산
+            const currentYear = 2025;
+            const age = currentYear - carAge;
+            let ageDiscountRate = 0;
+
+            if (age >= 12) {
+                ageDiscountRate = 0.5; // 12년 이상 50%
+            } else if (age >= 9) {
+                ageDiscountRate = 0.15; // 9년 이상 15%
+            } else if (age >= 6) {
+                ageDiscountRate = 0.10; // 6년 이상 10%
+            } else if (age >= 3) {
+                ageDiscountRate = 0.05; // 3년 이상 5%
+            }
+
+            const ageDiscount = totalBeforeDiscount * ageDiscountRate;
+            const totalAfterAgeDiscount = totalBeforeDiscount - ageDiscount;
+
+            // 5. 연납 할인 (10%)
+            let annualDiscount = 0;
+            if (annualPayment) {
+                annualDiscount = totalAfterAgeDiscount * 0.1;
+            }
+
+            // 6. 최종 납부액
+            const totalTax = totalAfterAgeDiscount - annualDiscount;
+            const halfYearTax = totalTax / 2;
+
+            // 결과 표시
+            document.getElementById('baseTax').textContent = formatNumber(baseTax) + '원';
+            document.getElementById('eduTax').textContent = formatNumber(eduTax) + '원';
+            document.getElementById('ageDiscount').textContent = '-' + formatNumber(ageDiscount) + '원 (' + (ageDiscountRate * 100) + '%)';
+            document.getElementById('annualDiscount').textContent = annualPayment ? '-' + formatNumber(annualDiscount) + '원 (10%)' : '0원';
+            document.getElementById('totalTax').textContent = formatNumber(totalTax) + '원';
+            document.getElementById('halfYearTax').textContent = formatNumber(halfYearTax) + '원';
+
+            document.getElementById('result').classList.add('show');
+        }
+
+        // 엔터키로 계산
+        document.getElementById('displacement').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateTax();
+            }
+        });
+    </script>
+</body>
+</html>
